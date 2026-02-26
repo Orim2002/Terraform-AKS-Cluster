@@ -1,0 +1,13 @@
+# State files — stored in Azure Blob Storage, never commit locally
+terraform.tfstate
+terraform.tfstate.backup
+
+# Variable files contain secrets
+terraform.tfvars
+
+# Terraform working directory
+.terraform/
+
+# SSH keys
+argocd-deploy-key
+argocd-deploy-key.pub
