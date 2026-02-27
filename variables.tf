@@ -98,5 +98,5 @@ variable "operator_namespace" {
 variable "operator_service_account" {
   description = "Kubernetes service account name used by the operator pod (must match Helm release name + '-operator-sa')"
   type        = string
-  default     = "operator-operator-sa"
+  default     = "custom-operator-operator-sa"
 }
