@@ -21,4 +21,7 @@ vm_size             = "Standard_DC2s_v3"
 base_domain = "orima.com"
 
 # ── Grafana ───────────────────────────────────────────────────────────────────
-grafana_admin_password = "changeme"
+grafana_admin_password = "<YOUR_GRAFANA_PASSWORD>"
+
+# ── Let's Encrypt ─────────────────────────────────────────────────────────────
+letsencrypt_email = "<YOUR_EMAIL>"
