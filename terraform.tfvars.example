@@ -2,9 +2,9 @@
 # terraform.tfvars is git-ignored — never commit real credentials.
 
 # ── Azure Credentials ─────────────────────────────────────────────────────────
-subscription_id = "6f7d09bf-a5e9-46c0-bbae-7ddab72ab1fd"
-tenant_id       = "1fa953ad-b525-4ef0-932b-63310c1a820a"
-client_id       = "e471b58b-e275-4698-8381-51a49f09757f"
+subscription_id = "<YOUR_SUBSCRIPTION_ID>"
+tenant_id       = "<YOUR_TENANT_ID>"
+client_id       = "<YOUR_CLIENT_ID>"
 client_secret   = "<YOUR_CLIENT_SECRET>"
 
 # ── Cluster ───────────────────────────────────────────────────────────────────
@@ -18,7 +18,7 @@ vm_size             = "Standard_DC2s_v3"
 # ── Ingress & DNS ─────────────────────────────────────────────────────────────
 # All ingress hostnames will be <service>.<base_domain>
 # After applying, point your DNS (or /etc/hosts) at the nginx LoadBalancer IP.
-base_domain = "orima.com"
+base_domain = "<YOUR_DOMAIN>"
 
 # ── Grafana ───────────────────────────────────────────────────────────────────
 grafana_admin_password = "<YOUR_GRAFANA_PASSWORD>"
