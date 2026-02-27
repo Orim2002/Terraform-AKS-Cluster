@@ -58,20 +58,35 @@ resource "time_sleep" "wait_for_cert_manager" {
   create_duration = "30s"
 }
 
-# Self-signed ClusterIssuer — used by the operator (pr-*.preview.<domain> ingresses)
-# and by the Grafana ingress.
+# Let's Encrypt ClusterIssuer — used by the operator (pr-*.preview.<domain> ingresses)
+# and by the Grafana/ArgoCD ingresses.
 # kubectl_manifest (gavinbunney/kubectl) is used instead of kubernetes_manifest
 # because it defers API validation to apply time, avoiding the "no client config"
 # error that occurs when the cluster does not yet exist at plan time.
-resource "kubectl_manifest" "selfsigned_cluster_issuer" {
+resource "kubectl_manifest" "letsencrypt_cluster_issuer" {
   yaml_body = yamlencode({
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
     metadata = {
-      name = "selfsigned-issuer"
+      name = "letsencrypt-issuer"
     }
     spec = {
-      selfSigned = {}
+      acme = {
+        server = "https://acme-v02.api.letsencrypt.org/directory"
+        email  = var.letsencrypt_email
+        privateKeySecretRef = {
+          name = "letsencrypt-account-key"
+        }
+        solvers = [
+          {
+            http01 = {
+              ingress = {
+                ingressClassName = "nginx"
+              }
+            }
+          }
+        ]
+      }
     }
   })
 
@@ -110,7 +125,7 @@ resource "helm_release" "argocd" {
           tls               = true
 
           annotations = {
-            "cert-manager.io/cluster-issuer"               = "selfsigned-issuer"
+            "cert-manager.io/cluster-issuer"               = "letsencrypt-issuer"
             "nginx.ingress.kubernetes.io/ssl-redirect"      = "true"
             "nginx.ingress.kubernetes.io/force-ssl-redirect" = "true"
           }
@@ -122,7 +137,7 @@ resource "helm_release" "argocd" {
   depends_on = [
     kubernetes_namespace.argocd,
     helm_release.nginx_ingress,
-    kubectl_manifest.selfsigned_cluster_issuer,
+    kubectl_manifest.letsencrypt_cluster_issuer,
   ]
 }
 
@@ -156,7 +171,7 @@ resource "helm_release" "kube_prometheus_stack" {
           hosts            = ["grafana.${var.base_domain}"]
 
           annotations = {
-            "cert-manager.io/cluster-issuer"          = "selfsigned-issuer"
+            "cert-manager.io/cluster-issuer"          = "letsencrypt-issuer"
             "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
           }
 
@@ -185,6 +200,6 @@ resource "helm_release" "kube_prometheus_stack" {
   depends_on = [
     kubernetes_namespace.monitoring,
     helm_release.nginx_ingress,
-    kubectl_manifest.selfsigned_cluster_issuer,
+    kubectl_manifest.letsencrypt_cluster_issuer,
   ]
 }

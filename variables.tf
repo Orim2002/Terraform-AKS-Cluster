@@ -73,5 +73,9 @@ variable "grafana_admin_password" {
   description = "Admin password for Grafana"
   type        = string
   sensitive   = true
-  default     = "admin"
+}
+
+variable "letsencrypt_email" {
+  description = "Email address for Let's Encrypt ACME registration"
+  type        = string
 }
