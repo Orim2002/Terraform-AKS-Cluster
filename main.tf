@@ -25,6 +25,10 @@ resource "azurerm_kubernetes_cluster" "main" {
     type = "SystemAssigned"
   }
 
+  # Enable OIDC issuer so pods can use Workload Identity to authenticate to Azure
+  oidc_issuer_enabled       = true
+  workload_identity_enabled = true
+
   network_profile {
     network_plugin = "azure"
   }

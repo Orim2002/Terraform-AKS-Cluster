@@ -38,3 +38,13 @@ output "get_argocd_password" {
   description = "Command to retrieve the initial ArgoCD admin password"
   value       = "kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d"
 }
+
+output "oidc_issuer_url" {
+  description = "OIDC issuer URL of the AKS cluster (used when creating additional federated credentials)"
+  value       = azurerm_kubernetes_cluster.main.oidc_issuer_url
+}
+
+output "operator_client_id" {
+  description = "Client ID of the operator managed identity — set this as workloadIdentity.clientId in the Helm values"
+  value       = azurerm_user_assigned_identity.operator.client_id
+}

@@ -11,9 +11,10 @@ variable "client_id" {
 }
 
 variable "client_secret" {
-  description = "Azure Service Principal Client Secret"
+  description = "Azure Service Principal Client Secret (omit when use_oidc = true)"
   type        = string
   sensitive   = true
+  default     = null
 }
 
 variable "tenant_id" {
@@ -78,4 +79,24 @@ variable "grafana_admin_password" {
 variable "letsencrypt_email" {
   description = "Email address for Let's Encrypt ACME registration"
   type        = string
+}
+
+# ── Workload Identity ─────────────────────────────────────────────────────────
+
+variable "use_oidc" {
+  description = "Use OIDC authentication for the azurerm provider (set true when running via GitHub Actions)"
+  type        = bool
+  default     = false
+}
+
+variable "operator_namespace" {
+  description = "Kubernetes namespace where the operator is deployed"
+  type        = string
+  default     = "operator"
+}
+
+variable "operator_service_account" {
+  description = "Kubernetes service account name used by the operator pod (must match Helm release name + '-operator-sa')"
+  type        = string
+  default     = "operator-operator-sa"
 }

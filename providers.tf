@@ -45,9 +45,11 @@ provider "kubectl" {
 provider "azurerm" {
   features {}
   subscription_id = var.subscription_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
   tenant_id       = var.tenant_id
+  client_id       = var.client_id
+  # Omit client_secret and set use_oidc = true when running via GitHub Actions
+  client_secret = var.client_secret
+  use_oidc      = var.use_oidc
 }
 
 # Both kubernetes and helm providers are configured with the AKS cluster's
